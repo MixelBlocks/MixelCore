@@ -3,7 +3,6 @@ package de.mixelblocks.core.configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 

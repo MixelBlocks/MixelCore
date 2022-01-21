@@ -1,5 +1,7 @@
 package de.mixelblocks.core;
 
+import de.mixelblocks.core.commands.CoreReloadCommand;
+import de.mixelblocks.core.commands.bukkit.*;
 import de.mixelblocks.core.configuration.Config;
 import de.mixelblocks.core.configuration.ConfigImpl;
 import de.mixelblocks.core.database.MongoDatabaseHandler;
@@ -19,6 +21,16 @@ import java.io.File;
  */
 public class MixelCorePlugin extends JavaPlugin {
 
+    public static final String
+            PLUGIN_NAME = "&#00FF00M&#00EE00I&#00DD00X&#00CC00E&#00BB00L &#FF0000C&#EE0000O&#DD0000R&#CC0000E",
+            PREFIX = "&r[&l" + PLUGIN_NAME + "&r]",
+            prefix = PREFIX + " &e›&c› &r";
+
+    private static MixelCorePlugin instance;
+    public static MixelCorePlugin getInstance() {
+        return instance;
+    }
+
     private static MixelCore apiImplementation;
 
     private Config whitelistConfig;
@@ -30,6 +42,7 @@ public class MixelCorePlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
+        instance = this;
     }
 
     @Override
@@ -72,6 +85,22 @@ public class MixelCorePlugin extends JavaPlugin {
     }
 
     private void registration() {
+
+        // Core Commands
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new CoreReloadCommand(this));
+
+        // Bukkit overwrites
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new EnchantCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new ExperienceCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new GamemodeCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new GiveCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new KickCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new PluginsCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new ReloadServerCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new StopCommand(this));
+        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new WhiteListCommand(this));
+
+        // Default Listeners
         Bukkit.getPluginManager().registerEvents(new DefaultPlayerListener(this), this);
         Bukkit.getPluginManager().registerEvents(new DefaultChatListener(this), this);
 

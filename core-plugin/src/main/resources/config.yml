@@ -8,6 +8,7 @@ syncGroup: 'internal'
 economy:
   short: 'ꪑ᥊'
   currency: 'Mixels'
+  startAmount: 5000
 
 database:
   connectionString: 'mongodb://connection'

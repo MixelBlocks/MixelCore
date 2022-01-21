@@ -1,5 +1,6 @@
 package de.mixelblocks.core.economy;
 
+import de.mixelblocks.core.database.MongoDatabaseHandler;
 import de.mixelblocks.core.player.CorePlayer;
 
 import java.util.UUID;
@@ -37,5 +38,11 @@ public interface EconomySystem {
      * @return economyData
      */
     EconomyPlayerData playerData(UUID uuid);
+
+    /**
+     * Get the database handler for economy system
+     * @return databaseHandler
+     */
+    MongoDatabaseHandler db();
 
 }
