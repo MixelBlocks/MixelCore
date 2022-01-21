@@ -1,4 +1,4 @@
-package de.mixelblocks.core;
+package de.mixelblocks.core.permissions;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;

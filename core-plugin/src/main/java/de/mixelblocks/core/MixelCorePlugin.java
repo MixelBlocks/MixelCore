@@ -4,6 +4,7 @@ import de.mixelblocks.core.configuration.Config;
 import de.mixelblocks.core.configuration.ConfigImpl;
 import de.mixelblocks.core.database.MongoDatabaseHandler;
 import de.mixelblocks.core.database.RedisHandler;
+import de.mixelblocks.core.listener.DefaultChatListener;
 import de.mixelblocks.core.listener.DefaultPlayerListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -72,6 +73,7 @@ public class MixelCorePlugin extends JavaPlugin {
 
     private void registration() {
         Bukkit.getPluginManager().registerEvents(new DefaultPlayerListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new DefaultChatListener(this), this);
 
     }
 

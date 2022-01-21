@@ -2,9 +2,11 @@ package de.mixelblocks.core;
 
 import de.mixelblocks.core.bungee.ProxyManager;
 import de.mixelblocks.core.economy.EconomySystem;
+import de.mixelblocks.core.permissions.PermissionManager;
 import de.mixelblocks.core.player.CoreOfflinePlayer;
 import de.mixelblocks.core.player.CorePlayer;
 import de.mixelblocks.core.player.CorePlayerManager;
+import de.mixelblocks.core.server.WhitelistManager;
 
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +34,18 @@ public interface MixelCore {
      * @return economySystem
      */
     EconomySystem economySystem();
+
+    /**
+     * returns the instance of the luckperms permission manager
+     * @return permissionManager
+     */
+    PermissionManager permissionManager();
+
+    /**
+     * returns the instance of the whitelist manager
+     * @return whitelistManager
+     */
+    WhitelistManager whitelistManager();
 
     /**
      * Resolve a CorePlayer by uuid ( returns null if offline )

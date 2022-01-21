@@ -4,8 +4,12 @@ import de.mixelblocks.core.bungee.ProxyManager;
 import de.mixelblocks.core.bungee.ProxyManagerImpl;
 import de.mixelblocks.core.economy.EconomySystem;
 import de.mixelblocks.core.economy.EconomySystemImpl;
+import de.mixelblocks.core.permissions.PermissionManager;
+import de.mixelblocks.core.permissions.PermissionManagerImpl;
 import de.mixelblocks.core.player.CorePlayerManager;
 import de.mixelblocks.core.player.CorePlayerManagerImpl;
+import de.mixelblocks.core.server.WhitelistManager;
+import de.mixelblocks.core.server.WhitelistManagerImpl;
 
 /**
  * @since 22.01.2022
@@ -16,12 +20,17 @@ public class MixelCoreImpl implements MixelCore {
     private final MixelCorePlugin plugin;
     private final ProxyManager proxyManager;
     private final CorePlayerManager playerManager;
+    private final PermissionManager permissionManager;
+    private final WhitelistManager whitelistManager;
     private final EconomySystem economySystem;
+
 
     public MixelCoreImpl(MixelCorePlugin plugin) {
         this.plugin = plugin;
         this.proxyManager = new ProxyManagerImpl(plugin);
         this.playerManager = new CorePlayerManagerImpl(plugin);
+        this.whitelistManager = new WhitelistManagerImpl(plugin);
+        this.permissionManager = new PermissionManagerImpl(plugin);
         this.economySystem = new EconomySystemImpl(plugin);
     }
 
@@ -42,5 +51,15 @@ public class MixelCoreImpl implements MixelCore {
     @Override
     public EconomySystem economySystem() {
         return economySystem;
+    }
+
+    @Override
+    public PermissionManager permissionManager() {
+        return permissionManager;
+    }
+
+    @Override
+    public WhitelistManager whitelistManager() {
+        return whitelistManager;
     }
 }
