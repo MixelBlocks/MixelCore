@@ -1,6 +1,6 @@
 package de.mixelblocks.core.events;
 
-import org.bukkit.entity.Player;
+import de.mixelblocks.core.player.CorePlayer;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
@@ -9,18 +9,18 @@ import org.jetbrains.annotations.NotNull;
  * @since 22.01.2022
  * @author LuciferMorningstarDev
  */
-public class PlayerChangedNameEvent extends Event {
+public class AsyncPlayerChangedNameEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private Player player;
+    private CorePlayer player;
     private String oldName;
 
     /**
      * @param player
      * @param oldName
      */
-    public PlayerChangedNameEvent(Player player, String oldName) {
+    public AsyncPlayerChangedNameEvent(CorePlayer player, String oldName) {
         this.player = player;
         this.oldName = oldName;
     }
@@ -29,7 +29,7 @@ public class PlayerChangedNameEvent extends Event {
      * get the player which is meant by changed name in the event
      * @return player
      */
-    public Player getPlayer() {
+    public CorePlayer getPlayer() {
         return player;
     }
 
@@ -46,7 +46,7 @@ public class PlayerChangedNameEvent extends Event {
      * @return newName
      */
     public String getNewName() {
-        return player.getName();
+        return player.username();
     }
 
     @Override
