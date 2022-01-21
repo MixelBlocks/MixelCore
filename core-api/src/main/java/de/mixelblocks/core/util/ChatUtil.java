@@ -19,7 +19,7 @@ public class ChatUtil {
     private ChatUtil() {} // prevent instantiation
 
     /**
-     * Colorize &(colorCode) messages
+     * Colorize &#38;(colorCode) messages
      * @param message
      * @return messageColorized
      */
@@ -28,7 +28,7 @@ public class ChatUtil {
     }
 
     /**
-     * Colorize &#(hexCode) messages
+     * Colorize &#38;#(hexCode) messages
      * @param message
      * @return messageColorized
      */
@@ -48,7 +48,7 @@ public class ChatUtil {
     }
 
     /**
-     * Colorize messages with &#(hexCode) and &(colorCode)
+     * Colorize messages with &#38;#(hexCode) and &#38;(colorCode)
      * @param message
      * @return messageColorized
      */
