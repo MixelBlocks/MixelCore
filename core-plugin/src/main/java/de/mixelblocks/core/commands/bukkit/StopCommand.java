@@ -20,11 +20,11 @@ public class StopCommand extends Command {
         this.plugin = plugin;
         ArrayList<String> aliases = new ArrayList<>();
 
-        this.setPermission("core.bukkitcommand.stop");
-        this.setPermissionMessage(ChatUtil.colorizeHexAndCode(MixelCorePlugin.prefix + "&#00EE00Die fehlt die Berechtigung: &6" + this.getPermission()));
+        this.setPermission("core.command." + this.getName().toLowerCase());
+        this.setPermissionMessage(ChatUtil.colorizeHexAndCode(MixelCorePlugin.prefix + "&#00EE00Dir fehlt die Berechtigung: &6" + this.getPermission()));
 
         this.setDescription(ChatUtil.colorizeHexAndCode(MixelCorePlugin.prefix + "&#EECCAADieser Command ist deaktiviert."));
-        this.setUsage(ChatUtil.colorizeHexAndCode(MixelCorePlugin.prefix + "&#EE0000Deaktiviert."));
+        this.setUsage(ChatUtil.colorizeHexAndCode(MixelCorePlugin.prefix + "&r&c/" + this.getName()));
 
         aliases.add("shutdown");
         this.setAliases(aliases);
