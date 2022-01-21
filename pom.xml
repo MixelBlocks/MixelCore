@@ -71,6 +71,8 @@
     <modules>
         <module>core-api</module>
         <module>core-plugin</module>
+        <!-- DO NOT COMPILE EXAMPLE PLUGIN ( ONLY AS SHOWCASE ) -->
+        <!-- <module>example-plugin-with-api</module> -->
     </modules>
 
 </project>

@@ -1,0 +1,14 @@
+name: ExampleCoreApiImplementPlugin
+version: ${project.version}
+api-version: 1.16
+main: de.mixelblocks.example.ExamplePlugin
+description: Dies Plugin zeigt nur wie ihr die API implementiert.
+
+authors:
+  - LuciferMorningstarDev
+website: https://dash.mixelblocks.de/
+
+depend:
+  - MixelCore
+
+load: POSTWORLD
