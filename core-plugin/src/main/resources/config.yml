@@ -1,0 +1,19 @@
+config-version: 1 # DO NOT CHANGE
+
+server_name: internal
+
+syncPlayers: true
+syncGroup: 'internal'
+
+economy:
+  short: 'ꪑ᥊'
+  currency: 'Mixels'
+
+database:
+  connectionString: 'mongodb://connection'
+  name: 'core'
+
+redis:
+  connectionString: 'redis://localhost:6379'
+  username: 'default'
+  authentication: ''

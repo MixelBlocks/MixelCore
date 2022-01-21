@@ -1,0 +1,12 @@
+config-version: 1 # DO NOT CHANGE
+# | to protect all world spawns only set - all in list
+# | for none et enabled to false
+# | to protect solo worlds - world-1 - world-2
+spawn:
+  enabled: false
+  raius: 100
+  protectedWorlds:
+    - all
+
+# | DO NOT CHANGE UNDER THIS SECTION
+areas:

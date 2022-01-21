@@ -1,0 +1,15 @@
+name: MixelCore
+version: ${project.version}
+api-version: 1.16
+main: de.mixelblocks.core.MixelCorePlugin
+description: Dies Plugin fügt dem MixelBlocks Server einige generelle Funktionen sowie Systeme hinzu.
+
+authors:
+  - LuciferMorningstarDev
+website: https://dash.mixelblocks.de/
+
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
+
+load: STARTUP

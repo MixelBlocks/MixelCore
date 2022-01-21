@@ -1,0 +1,4 @@
+config-version: 1 # DO NOT CHANGE
+
+reason: 'Der Server ist aktuell gewhitelisted.'
+enabled: false
