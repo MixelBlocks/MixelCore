@@ -12,20 +12,6 @@ import java.io.IOException;
 public interface Config {
 
     /**
-     * To specify the Configuration load Type
-     */
-    enum ConfigType {
-        /**
-         * YamlConfiguration.loadConfiguration
-         */
-        YAML,
-        /**
-         * Not implemented YET
-         */
-        JSON;
-    }
-
-    /**
      * Reload the configuration
      */
     void reloadConfig() throws OperationNotSupportedException;

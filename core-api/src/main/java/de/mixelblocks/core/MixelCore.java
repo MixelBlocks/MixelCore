@@ -1,6 +1,7 @@
 package de.mixelblocks.core;
 
 import de.mixelblocks.core.bungee.ProxyManager;
+import de.mixelblocks.core.economy.EconomySystem;
 import de.mixelblocks.core.player.CoreOfflinePlayer;
 import de.mixelblocks.core.player.CorePlayer;
 import de.mixelblocks.core.player.CorePlayerManager;
@@ -25,6 +26,12 @@ public interface MixelCore {
      * @return corePlayerManager
      */
     CorePlayerManager playerManager();
+
+    /**
+     * returns the economy system provider instance
+     * @return economySystem
+     */
+    EconomySystem economySystem();
 
     /**
      * Resolve a CorePlayer by uuid ( returns null if offline )
