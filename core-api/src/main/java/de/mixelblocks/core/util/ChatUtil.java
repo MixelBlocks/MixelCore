@@ -1,6 +1,5 @@
 package de.mixelblocks.core.util;
 
-import de.mixelblocks.core.MixelCore;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -21,6 +20,9 @@ import java.util.regex.Pattern;
  */
 public class ChatUtil {
 
+    public static final Pattern hexPatternAmpersAnd6 = Pattern.compile("&#([A-Fa-f0-9]{6})"),
+            hexPatternAmpersAnd3 = Pattern.compile("&#([A-Fa-f0-9]{3})");
+
     private ChatUtil() {} // prevent instantiation
 
     /**
@@ -38,9 +40,7 @@ public class ChatUtil {
      * @return messageColorized
      */
     public static String colorizeHex(String message) {
-        Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
-        char colorChar = '§';
-        Matcher matcher = hexPattern.matcher(message);
+        Matcher matcher = hexPatternAmpersAnd6.matcher(message);
         StringBuffer buffer = new StringBuffer(message.length() + 32);
         while (matcher.find()) {
             String group = matcher.group(1);
@@ -49,7 +49,18 @@ public class ChatUtil {
                     .charAt(2) + '§' + group.charAt(3) + '§' + group
                     .charAt(4) + '§' + group.charAt(5));
         }
-        return matcher.appendTail(buffer).toString();
+        String after6Hex = matcher.appendTail(buffer).toString();
+        Matcher matcher2 = hexPatternAmpersAnd3.matcher(after6Hex);
+        StringBuffer buffer2 = new StringBuffer(after6Hex.length() + 32);
+        while (matcher2.find()) {
+            String group2 = matcher2.group(1);
+            matcher2.appendReplacement(buffer2, "§x§" + group2
+                    .charAt(0) + '§' + group2.charAt(0) + '§' + group2
+                    .charAt(1) + '§' + group2.charAt(1) + '§' + group2
+                    .charAt(2) + '§' + group2.charAt(2));
+        }
+
+        return matcher2.appendTail(buffer2).toString();
     }
 
     /**
@@ -103,9 +114,7 @@ public class ChatUtil {
      */
     public static boolean replySender(CommandSender sender, String message) {
         sender.sendMessage(
-                Component.text(
-                        colorizeHexAndCode(message)
-                )
+                colorizeHexAndCode(message)
         );
         return true;
     }
@@ -129,9 +138,7 @@ public class ChatUtil {
      */
     public static boolean replyHologram(Player sender, String message) {
         sender.sendActionBar(
-                Component.text(
-                        colorizeHexAndCode(message)
-                )
+                colorizeHexAndCode(message)
         );
         return true;
     }
@@ -143,14 +150,11 @@ public class ChatUtil {
      * @return success
      */
     public static boolean replyTitle(Player sender, String message) {
-        sender.showTitle(Title.title(
-                Component.text(
-                        colorizeHexAndCode("")
-                ),
-                Component.text(
-                        colorizeHexAndCode(message)
-                )
-        ));
+        sender.sendTitle(
+                colorizeHexAndCode(""),
+                colorizeHexAndCode(message),
+                3,40,3
+        );
         return true;
     }
 
@@ -162,15 +166,11 @@ public class ChatUtil {
      * @return success
      */
     public static boolean replyTitle(Player sender, String title, String message) {
-        sender.showTitle(Title.title(
-                Component.text(
-                        colorizeHexAndCode(title)
-                ),
-                Component.text(
-                        colorizeHexAndCode(message)
-                ),
-                Title.Times.of(Duration.ofSeconds(2), Duration.ofSeconds(2), Duration.ofSeconds(2))
-        ));
+        sender.sendTitle(
+                colorizeHexAndCode(title),
+                colorizeHexAndCode(message),
+                3,40,3
+        );
         return true;
     }
 
@@ -185,15 +185,11 @@ public class ChatUtil {
      * @return success
      */
     public static boolean replyTitle(Player sender, String title, String message, int fadeIn, int stay, int fadeOut) {
-        sender.showTitle(Title.title(
-                Component.text(
-                        colorizeHexAndCode(title)
-                ),
-                Component.text(
-                        colorizeHexAndCode(message)
-                ),
-                Title.Times.of(Duration.ofSeconds(fadeIn), Duration.ofSeconds(stay), Duration.ofSeconds(fadeOut))
-        ));
+        sender.sendTitle(
+                colorizeHexAndCode(title),
+                colorizeHexAndCode(message),
+                fadeIn*20,stay*20,fadeOut*20
+        );
         return true;
     }
 
@@ -206,15 +202,11 @@ public class ChatUtil {
      * @return success
      */
     public static boolean replyTitle(Player sender, String title, String message, int stay) {
-        sender.showTitle(Title.title(
-                Component.text(
-                        colorizeHexAndCode(title)
-                ),
-                Component.text(
-                        colorizeHexAndCode(message)
-                ),
-                Title.Times.of(Duration.ofMillis(150), Duration.ofSeconds(stay), Duration.ofMillis(150))
-        ));
+        sender.sendTitle(
+                colorizeHexAndCode(title),
+                colorizeHexAndCode(message),
+                1,stay*20,1
+        );
         return true;
     }
 

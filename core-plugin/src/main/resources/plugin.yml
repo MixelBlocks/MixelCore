@@ -8,8 +8,9 @@ authors:
   - LuciferMorningstarDev
 website: https://dash.mixelblocks.de/
 
-softdepend:
+depend:
   - LuckPerms
   - PlaceholderAPI
+  - ProtocolLib
 
 load: STARTUP

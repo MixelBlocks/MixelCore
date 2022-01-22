@@ -40,10 +40,9 @@ public class StopCommand extends Command {
             }
 
         }
-        sender.sendMessage(Component.text(
-                        ChatUtil.colorizeHexAndCode(
-                                MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert.")
-                )
+        sender.sendMessage(
+                ChatUtil.colorizeHexAndCode(
+                        MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert.")
         );
         return false;
     }

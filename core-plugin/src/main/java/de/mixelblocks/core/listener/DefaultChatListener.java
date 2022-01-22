@@ -2,16 +2,16 @@ package de.mixelblocks.core.listener;
 
 import de.mixelblocks.core.MixelCorePlugin;
 import de.mixelblocks.core.permissions.PermissionManager;
-import me.clip.placeholderapi.PlaceholderAPI;
-import net.md_5.bungee.api.ChatColor;
+import de.mixelblocks.core.util.ChatUtil;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import io.papermc.paper.event.player.ChatEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @since 22.01.2022
@@ -31,11 +31,11 @@ public class DefaultChatListener implements Listener {
         String message = event.getMessage();
 
         if(event.getPlayer().hasPermission("core.chat.colorized")) {
-            message = colorize(message);
+            message = ChatUtil.colorizeCode(message);
         }
 
         if(event.getPlayer().hasPermission("core.chat.colorized.hex")) {
-            message = translateHexColorCodes(message);
+            message = ChatUtil.colorizeHex(message);
         }
 
         Player player = event.getPlayer();
@@ -53,35 +53,12 @@ public class DefaultChatListener implements Listener {
                 .replace("{username-color}", (perms.playerMeta(player).getMetaValue("username-color") != null) ? perms.playerMeta(player).getMetaValue("username-color") : ((perms.groupMeta(group).getMetaValue("username-color") != null) ? perms.groupMeta(group).getMetaValue("username-color") : ""))
                 .replace("{message-color}", (perms.playerMeta(player).getMetaValue("message-color") != null) ? perms.playerMeta(player).getMetaValue("message-color") : ((perms.groupMeta(group).getMetaValue("message-color") != null) ? perms.groupMeta(group).getMetaValue("message-color") : ""));
 
-        String prefix = translateHexColorCodes(colorize(perms.resolvePlayerGroupPrefix(event.getPlayer())));
+        String prefix = ChatUtil.colorizeHexAndCode(perms.resolvePlayerGroupPrefix(event.getPlayer()));
 
-        format = translateHexColorCodes(colorize(isPlaceholderAPIEnabled() ? PlaceholderAPI.setPlaceholders(player, format) : format));
+        format = ChatUtil.colorizeHexAndCode(ChatUtil.isPlaceholderAPIEnabled() ? ChatUtil.replacePlaceholders(player, format) : format);
         event.setFormat(format.replace("{message}", (player.hasPermission("core.chat.colorcodes") && player.hasPermission("core.chat.hexcodes")) ?
-                translateHexColorCodes(colorize(message)) : (player.hasPermission("core.chat.colorcodes") ? colorize(message) : (player.hasPermission("core.chat.hexcodes") ?
-                translateHexColorCodes(message) : message))).replace("%", "%%"));
-    }
-
-    private String colorize(String message) {
-        return ChatColor.translateAlternateColorCodes('&', message);
-    }
-
-    private String translateHexColorCodes(String message) {
-        Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
-        char colorChar = '§';
-        Matcher matcher = hexPattern.matcher(message);
-        StringBuffer buffer = new StringBuffer(message.length() + 32);
-        while (matcher.find()) {
-            String group = matcher.group(1);
-            matcher.appendReplacement(buffer, "§x§" + group
-                    .charAt(0) + '§' + group.charAt(1) + '§' + group
-                    .charAt(2) + '§' + group.charAt(3) + '§' + group
-                    .charAt(4) + '§' + group.charAt(5));
-        }
-        return matcher.appendTail(buffer).toString();
-    }
-
-    private boolean isPlaceholderAPIEnabled() {
-        return plugin.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+                ChatUtil.colorizeHexAndCode(message) : (player.hasPermission("core.chat.colorcodes") ? ChatUtil.colorizeCode(message) : (player.hasPermission("core.chat.hexcodes") ?
+                ChatUtil.colorizeHex(message) : message))).replace("%", "%%"));
     }
 
 }

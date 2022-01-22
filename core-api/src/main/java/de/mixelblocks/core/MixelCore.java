@@ -2,6 +2,7 @@ package de.mixelblocks.core;
 
 import de.mixelblocks.core.bungee.ProxyManager;
 import de.mixelblocks.core.economy.EconomySystem;
+import de.mixelblocks.core.hack.HackManager;
 import de.mixelblocks.core.permissions.PermissionManager;
 import de.mixelblocks.core.player.CoreOfflinePlayer;
 import de.mixelblocks.core.player.CorePlayer;
@@ -16,6 +17,12 @@ import java.util.UUID;
  * @author LuciferMorningstarDev
  */
 public interface MixelCore {
+
+    /**
+     * returns the hacky solution registration manager
+     * @return hackManager
+     */
+    HackManager hacks();
 
     /**
      * returns the instance of the proxy manager

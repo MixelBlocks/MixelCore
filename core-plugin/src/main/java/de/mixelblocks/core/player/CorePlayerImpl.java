@@ -5,7 +5,6 @@ import de.mixelblocks.core.economy.EconomyPlayerData;
 import de.mixelblocks.core.objects.RedisKey;
 import de.mixelblocks.core.permissions.PermissionManager;
 import de.mixelblocks.core.util.Base64Util;
-import net.kyori.adventure.text.Component;
 import org.bson.Document;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
@@ -111,15 +110,9 @@ public class CorePlayerImpl implements CorePlayer {
 
             int finalGameMode = gameMode;
 
+            int heldItemSlot = online.getInventory().getHeldItemSlot();
+
             new Thread(() -> {
-
-                long expiryAfterThirtyMinutes = 60*30;
-                MixelCorePlugin.getInstance().redis().setEx(expiryAfterThirtyMinutes, RedisKey.PLAYER_INVENTORY.getKey() + "." + syncGroup + "." + uuid, inventory);
-                MixelCorePlugin.getInstance().redis().setEx(expiryAfterThirtyMinutes, RedisKey.PLAYER_ENDER_CHEST.getKey() + "." + syncGroup + "." + uuid, enderChest);
-                MixelCorePlugin.getInstance().redis().setEx(expiryAfterThirtyMinutes, RedisKey.PLAYER_POTION_EFFECTS.getKey() + "." + syncGroup + "." + uuid, potionEffects);
-                MixelCorePlugin.getInstance().redis().setEx(expiryAfterThirtyMinutes, RedisKey.PLAYER_XP.getKey() + "." + syncGroup + "." + uuid, Integer.toString(experience));
-                MixelCorePlugin.getInstance().redis().setEx(expiryAfterThirtyMinutes, RedisKey.PLAYER_GAME_MODE.getKey() + "." + syncGroup + "." + uuid, Integer.toString(finalGameMode));
-
                 Document playerData = MixelCorePlugin.getInstance().db().getDocument("player_data", syncGroup + "." + uuid);
                 if(playerData == null) {
                     playerData = MixelCorePlugin.getInstance().db().buildDocument(syncGroup + "." + uuid, new Object[][] {
@@ -137,6 +130,9 @@ public class CorePlayerImpl implements CorePlayer {
                             },
                             {
                                     RedisKey.PLAYER_GAME_MODE.getKey(), finalGameMode
+                            },
+                            {
+                                    RedisKey.HELD_ITEM_SLOT.getKey(), heldItemSlot
                             }
                     });
                     MixelCorePlugin.getInstance().db().insertDocument("player_data", playerData);
@@ -156,6 +152,9 @@ public class CorePlayerImpl implements CorePlayer {
                             },
                             {
                                     RedisKey.PLAYER_GAME_MODE.getKey(), finalGameMode
+                            },
+                            {
+                                    RedisKey.HELD_ITEM_SLOT.getKey(), heldItemSlot
                             }
                     });
                     MixelCorePlugin.getInstance().db().replaceDocument("player_data", syncGroup + "." + uuid, playerData);
@@ -178,34 +177,16 @@ public class CorePlayerImpl implements CorePlayer {
 
             Document playerData = MixelCorePlugin.getInstance().db().getDocument("player_data", syncGroup + "." + uuid);
 
-            if(MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_INVENTORY.getKey() + "." + syncGroup + "." + uuid) == null
-                    && playerData == null) {
+            if(playerData == null) {
                 return true;
             }
 
-            online.sendMessage(Component.text(MixelCorePlugin.prefix + "§aDownloading Data..."));
-
-            String inventoryData = MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_INVENTORY.getKey() + "." + syncGroup + "." + uuid);
-            String enderChestData = MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_ENDER_CHEST.getKey() + "." + syncGroup + "." + uuid);
-            String effectsData = MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_POTION_EFFECTS.getKey() + "." + syncGroup + "." + uuid);
-            String gameModeString = MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_GAME_MODE.getKey() + "." + syncGroup + "." + uuid);
-            String experience = MixelCorePlugin.getInstance().redis().get(RedisKey.PLAYER_XP.getKey() + "." + syncGroup + "." + uuid);
-
-            if(inventoryData == null) {
-                inventoryData = playerData.getString(RedisKey.PLAYER_INVENTORY.getKey());
-            }
-            if(enderChestData == null) {
-                enderChestData = playerData.getString(RedisKey.PLAYER_ENDER_CHEST.getKey());
-            }
-            if(effectsData == null) {
-                effectsData = playerData.getString(RedisKey.PLAYER_POTION_EFFECTS.getKey());
-            }
-            if(gameModeString == null) {
-                gameModeString = Integer.toString(playerData.getInteger(RedisKey.PLAYER_GAME_MODE.getKey(), 0));
-            }
-            if(experience == null) {
-                experience = Integer.toString(playerData.getInteger(RedisKey.PLAYER_XP.getKey(), 0));
-            }
+            String inventoryData = playerData.getString(RedisKey.PLAYER_INVENTORY.getKey());
+            String enderChestData = playerData.getString(RedisKey.PLAYER_ENDER_CHEST.getKey());
+            String effectsData = playerData.getString(RedisKey.PLAYER_POTION_EFFECTS.getKey());
+            String gameModeString = Integer.toString(playerData.getInteger(RedisKey.PLAYER_GAME_MODE.getKey(), 0));
+            String experience = Integer.toString(playerData.getInteger(RedisKey.PLAYER_XP.getKey(), 0));
+            String heldItemSlot = Integer.toString(playerData.getInteger(RedisKey.HELD_ITEM_SLOT.getKey(), 0));
 
             Inventory inventory = Base64Util.InventorySerializer.deserialize(inventoryData, InventoryType.PLAYER);
             Inventory enderChest = Base64Util.InventorySerializer.deserialize(enderChestData, InventoryType.ENDER_CHEST);
@@ -218,6 +199,8 @@ public class CorePlayerImpl implements CorePlayer {
 
             online.setTotalExperience(Integer.valueOf(experience));
 
+            online.getInventory().setHeldItemSlot(Integer.valueOf(heldItemSlot));
+
             int gameMode = Integer.valueOf(gameModeString);
             switch(gameMode) {
                 case 1: online.setGameMode(GameMode.CREATIVE); break;
@@ -227,7 +210,7 @@ public class CorePlayerImpl implements CorePlayer {
             }
 
         } catch(Exception e) {
-            MixelCorePlugin.getInstance().getLogger().warning("Failed loading playerdata (Sync)\n" + e.getStackTrace());
+            MixelCorePlugin.getInstance().getLogger().warning("Failed loading player data (Sync)\n" + e.getStackTrace());
             return false;
         }
         return true;

@@ -6,6 +6,7 @@ import de.mixelblocks.core.configuration.Config;
 import de.mixelblocks.core.configuration.ConfigImpl;
 import de.mixelblocks.core.database.MongoDatabaseHandler;
 import de.mixelblocks.core.database.RedisHandler;
+import de.mixelblocks.core.hack.defaults.HackChatProtocol;
 import de.mixelblocks.core.listener.DefaultChatListener;
 import de.mixelblocks.core.listener.DefaultPlayerListener;
 import org.bukkit.Bukkit;
@@ -85,6 +86,9 @@ public class MixelCorePlugin extends JavaPlugin {
     }
 
     private void registration() {
+
+        // install hacks
+        apiImplementation.hacks().register(HackChatProtocol.class, new HackChatProtocol());
 
         // Core Commands
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new CoreReloadCommand(this));

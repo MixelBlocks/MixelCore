@@ -4,6 +4,8 @@ import de.mixelblocks.core.bungee.ProxyManager;
 import de.mixelblocks.core.bungee.ProxyManagerImpl;
 import de.mixelblocks.core.economy.EconomySystem;
 import de.mixelblocks.core.economy.EconomySystemImpl;
+import de.mixelblocks.core.hack.HackManager;
+import de.mixelblocks.core.hack.HackManagerImpl;
 import de.mixelblocks.core.permissions.PermissionManager;
 import de.mixelblocks.core.permissions.PermissionManagerImpl;
 import de.mixelblocks.core.player.CorePlayerManager;
@@ -18,6 +20,9 @@ import de.mixelblocks.core.server.WhitelistManagerImpl;
 public class MixelCoreImpl implements MixelCore {
 
     private final MixelCorePlugin plugin;
+
+    private final HackManager hackManager;
+
     private final ProxyManager proxyManager;
     private final CorePlayerManager playerManager;
     private final PermissionManager permissionManager;
@@ -27,6 +32,7 @@ public class MixelCoreImpl implements MixelCore {
 
     public MixelCoreImpl(MixelCorePlugin plugin) {
         this.plugin = plugin;
+        this.hackManager = new HackManagerImpl();
         this.proxyManager = new ProxyManagerImpl(plugin);
         this.playerManager = new CorePlayerManagerImpl(plugin);
         this.whitelistManager = new WhitelistManagerImpl(plugin);
@@ -62,4 +68,10 @@ public class MixelCoreImpl implements MixelCore {
     public WhitelistManager whitelistManager() {
         return whitelistManager;
     }
+
+    @Override
+    public HackManager hacks() {
+        return hackManager;
+    }
+
 }

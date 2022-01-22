@@ -8,6 +8,7 @@ import de.mixelblocks.core.events.AsyncPlayerChangedNameEvent;
 import de.mixelblocks.core.player.CoreOfflinePlayerImpl;
 import de.mixelblocks.core.player.CorePlayer;
 import de.mixelblocks.core.player.CorePlayerImpl;
+import de.mixelblocks.core.util.ChatUtil;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -49,6 +50,7 @@ public class DefaultPlayerListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if(event.getPlayer() == null) return;
         CorePlayer corePlayer = new CorePlayerImpl(new CoreOfflinePlayerImpl(event.getPlayer()));
+        plugin.getApiImplementation().playerManager().allOnline().put(corePlayer.uuid(), corePlayer);
         new Thread(() -> {
             try {
                 Document uuidDoc = plugin.db().getDocument("uuids", "uuid", corePlayer.uuid().toString());
@@ -80,80 +82,84 @@ public class DefaultPlayerListener implements Listener {
             }
         }, "UUID-Check").start();
 
+        // Inventory and data sync
+        Bukkit.getScheduler().scheduleSyncDelayedTask(MixelCorePlugin.getInstance(), () -> {
+            if(MixelCorePlugin.getInstance().getConfig().getBoolean("syncPlayers", false)) {
+                corePlayer.loadPlayerData();
+                corePlayer.setSynchronizedPlayer(true);
+            } else {
+                corePlayer.setSynchronizedPlayer(true);
+            }
+            corePlayer.online().sendMessage(
+                    ChatUtil.colorizeHexAndCode(
+                            MixelCorePlugin.prefix + "§aDeine Daten wurden erfolgreich synchronisiert."
+                    )
+            );
+        }, 20);
+
         Bukkit.getPluginManager().callEvent(new CorePlayerJoinEvent(corePlayer));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST) // priority call last
     public void onPlayerQuit(PlayerQuitEvent event) {
         if(event.getPlayer() == null) return;
-        if(plugin.getApiImplementation().playerManager().allOnline().containsKey(event.getPlayer().getUniqueId()))
-            Bukkit.getPluginManager().callEvent(new CorePlayerQuitEvent(plugin.getApiImplementation().playerManager().allOnline().get(event.getPlayer().getUniqueId())));
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST) // priority call first
-    public void onCorePlayerJoin(CorePlayerJoinEvent event) {
-        if(event.getCorePlayer() == null) return;
-        plugin.getApiImplementation().playerManager().allOnline().put(event.getCorePlayer().uuid(), event.getCorePlayer());
-        Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-            if(event.getCorePlayer().loadPlayerData()) event.getCorePlayer().setSynchronizedPlayer(true);
-        }, 20L);
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST) // priority call last
-    public void onCorePlayerQuit(CorePlayerQuitEvent event) {
-        if(event.getCorePlayer() == null) return;
-        event.getCorePlayer().setSynchronizedPlayer(false);
-        if(event.getCorePlayer().savePlayerData()) event.getCorePlayer().setSynchronizedPlayer(true);
-        plugin.getApiImplementation().playerManager().allOnline().remove(event.getCorePlayer().uuid());
+        CorePlayer corePlayer = plugin.getApiImplementation().playerManager().allOnline().get(event.getPlayer().getUniqueId());
+        if(corePlayer != null && MixelCorePlugin.getInstance().getConfig().getBoolean("syncPlayers", false)) {
+            corePlayer.setSynchronizedPlayer(false);
+            corePlayer.savePlayerData();
+            corePlayer.setSynchronizedPlayer(true);
+        }
+        Bukkit.getPluginManager().callEvent(new CorePlayerQuitEvent(corePlayer));
+        plugin.getApiImplementation().playerManager().allOnline().remove(corePlayer.uuid());
     }
 
     // ============================================= SYNC CANCEL ============================================= \\
     @EventHandler
     public void syncCancel(PlayerCommandPreprocessEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerMoveEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerInteractEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(AsyncPlayerChatEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerPickupItemEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerDropItemEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerPickupArrowEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(PlayerPickupExperienceEvent event) {
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(event.getPlayer().getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     @EventHandler
     public void syncCancel(EntityDamageByEntityEvent event) {
         if(!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         CorePlayer corePlayer = MixelCorePlugin.api().playerManager().online(player.getUniqueId());
-        if(!corePlayer.isSynchronized()) event.setCancelled(true);
+        if(corePlayer == null || !corePlayer.isSynchronized()) event.setCancelled(true);
     }
     // ============================================= SYNC CANCEL ============================================= \\
 

@@ -25,13 +25,19 @@
         <dependency>
             <groupId>net.luckperms</groupId>
             <artifactId>api</artifactId>
-            <version>${lp.version}</version>
+            <version>${luckperms.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>${ph-api.version}</version>
+            <version>${placeholder-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>${protocol-lib.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
