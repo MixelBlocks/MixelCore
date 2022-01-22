@@ -2,6 +2,7 @@ package de.mixelblocks.core.util;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -112,9 +113,23 @@ public class ChatUtil {
      * @param message
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replySender(CommandSender sender, String message) {
         sender.sendMessage(
                 colorizeHexAndCode(message)
+        );
+        return true;
+    }
+
+    /**
+     * Reply with a message to a sender
+     * @param sender
+     * @param message
+     * @return success
+     */
+    public static boolean replySenderComponent(CommandSender sender, String message) {
+        sender.sendMessage(
+                MixelSerializer.ampersandHEX.deserialize(message)
         );
         return true;
     }
@@ -136,9 +151,23 @@ public class ChatUtil {
      * @param message
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replyHologram(Player sender, String message) {
         sender.sendActionBar(
                 colorizeHexAndCode(message)
+        );
+        return true;
+    }
+
+    /**
+     * Reply with a actionbar popup to a player
+     * @param sender
+     * @param message
+     * @return success
+     */
+    public static boolean replyHologramComponent(Player sender, String message) {
+        sender.sendActionBar(
+                MixelSerializer.ampersandHEX.deserialize(message)
         );
         return true;
     }
@@ -149,6 +178,7 @@ public class ChatUtil {
      * @param message ( The smaller shown text of the title )
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replyTitle(Player sender, String message) {
         sender.sendTitle(
                 colorizeHexAndCode(""),
@@ -161,15 +191,42 @@ public class ChatUtil {
     /**
      * reply with a title
      * @param sender
+     * @param message ( The smaller shown text of the title )
+     * @return success
+     */
+    public static boolean replyTitleComponent(Player sender, String message) {
+        sender.showTitle(
+                Title.title(
+                        Component.empty(),
+                        MixelSerializer.ampersandHEX.deserialize(message)
+                )
+        );
+        return true;
+    }
+
+    /**
+     * reply with a title
+     * @param sender
      * @param title ( The bigger shown text of the title )
      * @param message ( The smaller shown text of the title )
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replyTitle(Player sender, String title, String message) {
         sender.sendTitle(
                 colorizeHexAndCode(title),
                 colorizeHexAndCode(message),
                 3,40,3
+        );
+        return true;
+    }
+
+    public static boolean replyTitleComponent(Player sender, String title, String message) {
+        sender.showTitle(
+                Title.title(
+                        MixelSerializer.ampersandHEX.deserialize(title),
+                        MixelSerializer.ampersandHEX.deserialize(message)
+                )
         );
         return true;
     }
@@ -184,6 +241,7 @@ public class ChatUtil {
      * @param fadeOut the time to hide the title in seconds
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replyTitle(Player sender, String title, String message, int fadeIn, int stay, int fadeOut) {
         sender.sendTitle(
                 colorizeHexAndCode(title),
@@ -198,9 +256,35 @@ public class ChatUtil {
      * @param sender
      * @param title ( The bigger shown text of the title )
      * @param message ( The smaller shown text of the title )
+     * @param fadeIn the time to show the title in seconds
+     * @param stay the time to stay of title in seconds
+     * @param fadeOut the time to hide the title in seconds
+     * @return success
+     */
+    public static boolean replyTitleComponent(Player sender, String title, String message, int fadeIn, int stay, int fadeOut) {
+        sender.showTitle(
+                Title.title(
+                        MixelSerializer.ampersandHEX.deserialize(title),
+                        MixelSerializer.ampersandHEX.deserialize(message),
+                        Title.Times.of(
+                                Duration.ofSeconds(fadeIn),
+                                Duration.ofSeconds(stay),
+                                Duration.ofSeconds(fadeOut)
+                        )
+                )
+        );
+        return true;
+    }
+
+    /**
+     * reply with a title
+     * @param sender
+     * @param title ( The bigger shown text of the title )
+     * @param message ( The smaller shown text of the title )
      * @param stay the time to stay of title in seconds
      * @return success
      */
+    @Deprecated(since = "23.01.2022", forRemoval = true)
     public static boolean replyTitle(Player sender, String title, String message, int stay) {
         sender.sendTitle(
                 colorizeHexAndCode(title),
@@ -209,5 +293,37 @@ public class ChatUtil {
         );
         return true;
     }
+
+    public static boolean replyTitleComponent(Player sender, String title, String message, int stay) {
+        sender.showTitle(
+                Title.title(
+                        MixelSerializer.ampersandHEX.deserialize(title),
+                        MixelSerializer.ampersandHEX.deserialize(message),
+                        Title.Times.of(
+                                Duration.ofSeconds(1),
+                                Duration.ofSeconds(stay),
+                                Duration.ofSeconds(1)
+                        )
+                )
+        );
+        return true;
+    }
+
+    /**
+     * @since 23.01.2022
+     * @author LuciferMorningstarDev
+     */
+    public static class MixelSerializer {
+
+        private MixelSerializer() {} // prevent instanciation
+
+        public static final LegacyComponentSerializer sectionHEX = LegacyComponentSerializer.builder().character('§').hexCharacter('#').hexColors().build();
+        public static final LegacyComponentSerializer unusualSectionHEX = LegacyComponentSerializer.builder().character('§').hexCharacter('#').hexColors().useUnusualXRepeatedCharacterHexFormat().build();
+        public static final LegacyComponentSerializer ampersandHEX = LegacyComponentSerializer.builder().character('&').hexCharacter('#').hexColors().build();
+        public static final LegacyComponentSerializer ampersand = LegacyComponentSerializer.builder().character('&').build();
+        public static final LegacyComponentSerializer section = LegacyComponentSerializer.builder().character('§').build();
+
+    }
+
 
 }
