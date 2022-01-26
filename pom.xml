@@ -39,9 +39,7 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
 
-        <maven.deploy.skip>true</maven.deploy.skip>
-
-        <paper.version>1.16.5-R0.1-SNAPSHOT</paper.version>
+        <paper.version>1.18.1-R0.1-SNAPSHOT</paper.version>
 
         <mongo.version>4.3.3</mongo.version>
         <jedis.version>4.0.1</jedis.version>
@@ -50,21 +48,6 @@
         <placeholder-api.version>2.11.1</placeholder-api.version>
         <protocol-lib.version>4.7.0</protocol-lib.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
-        </repository>
-    </repositories>
 
     <pluginRepositories>
         <pluginRepository>

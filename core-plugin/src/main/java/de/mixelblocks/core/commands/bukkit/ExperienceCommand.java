@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ExperienceCommand extends Command {
 
@@ -32,11 +34,24 @@ public class ExperienceCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
-            ChatUtil.replySender(sender, MixelCorePlugin.prefix + "&cYou can only run this command as a player.");
+            ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cYou can only run this command as a player.");
             return true;
         }
+        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cDer command ist noch nicht implementiert.");
 
         return false;
+    }
+
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+
+        switch(args.length) {
+            default: break;
+        }
+
+        Collections.sort(completions);
+        return completions;
     }
 
 }

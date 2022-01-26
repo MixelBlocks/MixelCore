@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ReloadServerCommand extends Command {
 
@@ -34,22 +36,22 @@ public class ReloadServerCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
+        ChatUtil.replySenderComponent(sender,
+                    MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert."
+                );
+        return false;
+    }
 
-        if(sender.hasPermission(this.getPermission() + ".force")) {
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
 
-            if(args[0] != null && args[0].toLowerCase() == "--force") {
-                Bukkit.getServer().reload();
-                return true;
-            }
-
+        switch(args.length) {
+            default: break;
         }
 
-        sender.sendMessage(
-                ChatUtil.colorizeHexAndCode(
-                        MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert.")
-        );
-
-        return false;
+        Collections.sort(completions);
+        return completions;
     }
 
 }

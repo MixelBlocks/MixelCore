@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PluginsCommand extends Command {
 
@@ -30,8 +32,20 @@ public class PluginsCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
-
+        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cDer command ist deaktiviert.");
         return false;
+    }
+
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+
+        switch(args.length) {
+            default: break;
+        }
+
+        Collections.sort(completions);
+        return completions;
     }
 
 }

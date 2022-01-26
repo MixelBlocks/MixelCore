@@ -41,7 +41,7 @@ public class GamemodeCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
-            ChatUtil.replySender(sender, MixelCorePlugin.prefix + "&cYou can only run this command as a player.");
+            ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cYou can only run this command as a player.");
             return true;
         }
 
@@ -105,7 +105,7 @@ public class GamemodeCommand extends Command {
                 case "survival": case "s": case "0":
                     if(!sender.hasPermission(this.getPermission() + ".survival")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".survival");
                         return true;
                     }
@@ -114,7 +114,7 @@ public class GamemodeCommand extends Command {
                 case "creative": case "c": case "1":
                     if(!sender.hasPermission(this.getPermission() + ".creative")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".creative");
                         return true;
                     }
@@ -123,7 +123,7 @@ public class GamemodeCommand extends Command {
                 case "adventure": case "a": case "2":
                     if(!sender.hasPermission(this.getPermission() + ".adventure")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".adventure");
                         return true;
                     }
@@ -132,16 +132,16 @@ public class GamemodeCommand extends Command {
                 case "spectator": case "spec": case "3":
                     if(!sender.hasPermission(this.getPermission() + ".spectator")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".spectator");
                         return true;
                     }
                     targetMode = GameMode.SPECTATOR;
                     break;
-                default: ChatUtil.replySender(sender, MixelCorePlugin.prefix + "&cDer angegebene Gamemode ist nicht verfügbar."); return true;
+                default: ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cDer angegebene Gamemode ist nicht verfügbar."); return true;
             }
             target.setGameMode(targetMode);
-            ChatUtil.replySender(target, MixelCorePlugin.prefix + "&aDein Spielmodus wurde auf &6" + targetMode.name() + " &agesetzt.");
+            ChatUtil.replySenderComponent(target, MixelCorePlugin.prefix + "&aDein Spielmodus wurde auf &6" + targetMode.name() + " &agesetzt.");
             return true;
         }
 
@@ -154,7 +154,7 @@ public class GamemodeCommand extends Command {
                     if(!sender.hasPermission(this.getPermission() + ".others.survival")
                             && !sender.hasPermission(this.getPermission() + ".others.*")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".others.survival");
                         return true;
                     }
@@ -164,7 +164,7 @@ public class GamemodeCommand extends Command {
                     if(!sender.hasPermission(this.getPermission() + ".others.creative")
                             && !sender.hasPermission(this.getPermission() + ".others.*")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".others.creative");
                         return true;
                     }
@@ -174,7 +174,7 @@ public class GamemodeCommand extends Command {
                     if(!sender.hasPermission(this.getPermission() + ".others.adventure")
                             && !sender.hasPermission(this.getPermission() + ".others.*")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".others.adventure");
                         return true;
                     }
@@ -184,26 +184,26 @@ public class GamemodeCommand extends Command {
                     if(!sender.hasPermission(this.getPermission() + ".others.spectator")
                             && !sender.hasPermission(this.getPermission() + ".others.*")
                             && !sender.hasPermission(this.getPermission() + ".*")) {
-                        ChatUtil.replySender(sender, MixelCorePlugin.prefix
+                        ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix
                                 + "&cDir fehlt die Berechtigung: &6" + this.getPermission() + ".others.spectator");
                         return true;
                     }
                     targetMode = GameMode.SPECTATOR;
                     break;
-                default: ChatUtil.replySender(sender, MixelCorePlugin.prefix + "&cDer angegebene Gamemode ist nicht verfügbar."); return true;
+                default: ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cDer angegebene Gamemode ist nicht verfügbar."); return true;
             }
             target = Bukkit.getPlayer(args[1]);
             if(target == null) {
-                ChatUtil.replySender(sender, MixelCorePlugin.prefix + "&cDer angegebene Spieler ist nicht online.");
+                ChatUtil.replySenderComponent(sender, MixelCorePlugin.prefix + "&cDer angegebene Spieler ist nicht online.");
                 return true;
             }
             target.setGameMode(targetMode);
-            ChatUtil.replySender(target, MixelCorePlugin.prefix + "&aDein Spielmodus wurde auf &6" + targetMode.name() + " &agesetzt.");
-            ChatUtil.replySender(player, MixelCorePlugin.prefix + "&aDu hast den Spielmodus von: &6" + target.getName() + " &aauf &6" + targetMode.name() + " &agesetzt.");
+            ChatUtil.replySenderComponent(target, MixelCorePlugin.prefix + "&aDein Spielmodus wurde auf &6" + targetMode.name() + " &agesetzt.");
+            ChatUtil.replySenderComponent(player, MixelCorePlugin.prefix + "&aDu hast den Spielmodus von: &6" + target.getName() + " &aauf &6" + targetMode.name() + " &agesetzt.");
             return true;
         }
 
-        ChatUtil.replySender(sender, this.getUsage());
+        ChatUtil.replySenderComponent(sender, this.getUsage());
 
         return false;
     }

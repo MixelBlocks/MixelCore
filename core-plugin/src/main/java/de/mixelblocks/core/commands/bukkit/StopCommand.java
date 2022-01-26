@@ -6,9 +6,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class StopCommand extends Command {
 
@@ -32,19 +35,26 @@ public class StopCommand extends Command {
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
-        if(sender.hasPermission(this.getPermission() + ".force")) {
-
-            if(args[0] != null && args[0].toLowerCase() == "--force") {
-                Bukkit.getServer().shutdown();
-                return true;
-            }
-
+        if(!(sender instanceof ConsoleCommandSender)) {
+            ChatUtil.replySenderComponent(sender,
+                    MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert."
+            );
+        } else {
+            Bukkit.getServer().shutdown();
         }
-        sender.sendMessage(
-                ChatUtil.colorizeHexAndCode(
-                        MixelCorePlugin.prefix + "&#FF0000Dieser Command ist aus Sicherheitsgründen deaktiviert.")
-        );
         return false;
+    }
+
+    @Override
+    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        List<String> completions = new ArrayList<>();
+
+        switch(args.length) {
+            default: break;
+        }
+
+        Collections.sort(completions);
+        return completions;
     }
 
 }

@@ -98,11 +98,9 @@ public class MixelCorePlugin extends JavaPlugin {
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new ExperienceCommand(this));
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new GamemodeCommand(this));
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new GiveCommand(this));
-        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new KickCommand(this));
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new PluginsCommand(this));
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new ReloadServerCommand(this));
         Bukkit.getCommandMap().register(this.getName().toLowerCase(), new StopCommand(this));
-        Bukkit.getCommandMap().register(this.getName().toLowerCase(), new WhiteListCommand(this));
 
         // Default Listeners
         Bukkit.getPluginManager().registerEvents(new DefaultPlayerListener(this), this);
